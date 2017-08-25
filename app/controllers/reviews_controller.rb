@@ -3,9 +3,7 @@ class ReviewsController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
   def index
-    if params[:country] && params[:city]
-      # Search using both constraints
-    elsif params[:country]
+    if params[:country]
       # Search using only country
       country = params[:country]
       @reviews = Review.country_search(country)
@@ -16,6 +14,19 @@ class ReviewsController < ApplicationController
     else
       @reviews = Review.all.order('rating DESC')
     end
+
+    # For pageination use this code
+    # if params[:country]
+    #   # Search using only country
+    #   country = params[:country]
+    #   @reviews = Review.country_search(country).page(params[:page]).per_page(1)
+    # elsif params[:city]
+    #   # Search using only city
+    #   city = params[:city]
+    #   @reviews = Review.city_search(city).page(params[:page]).per_page(1)
+    # else
+    #   @reviews = Review.all.order('rating DESC').page(params[:page]).per_page(1)
+    # end
 
     json_response(@reviews)
   end
